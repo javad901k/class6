@@ -2,21 +2,64 @@
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>دفتر کلاسی ششم الف - دبستان حاج فیض</title>
-  <!-- تنظیمات PWA برای موبایل -->
+  
+  <!-- تنظیمات PWA برای نصب روی موبایل -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#4338ca">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="دفتر ششم">
   <link rel="apple-touch-icon" href="icon-192.png">
+  
+  <!-- فریم‌ورک‌ها و فونت اختصاصی با اعداد فارسی -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/misc/Farsi-Digits/font-face.css">
+  
   <style>
-    body { font-family: 'Vazirmatn FD', sans-serif; }
-    .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+    body {
+      font-family: 'Vazirmatn FD', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    /* هماهنگی با ناچ بالای صفحه و کلید هوم آیفون/اندروید */
+    header {
+      padding-top: max(env(safe-area-inset-top, 0px), 10px) !important;
+    }
+    .mobile-bottom-nav {
+      padding-bottom: max(env(safe-area-inset-bottom, 0px), 8px) !important;
+    }
+
+    /* اسکرول‌بار نرم و نامرئی */
+    .custom-scroll::-webkit-scrollbar { width: 4px; height: 4px; }
     .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* افکت فیزیکی لمس دکمه‌ها در موبایل */
+    .touch-pop:active {
+      transform: scale(0.95);
+      transition: transform 0.1s ease;
+    }
+
+    /* تبدیل مودال‌ها به کشویی از پایین در موبایل (Bottom Sheet) */
+    @media (max-width: 640px) {
+      .mobile-bottom-sheet {
+        align-items: flex-end !important;
+        padding: 0 !important;
+      }
+      .mobile-bottom-sheet > div {
+        border-bottom-left-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+        max-height: 90vh !important;
+        width: 100% !important;
+      }
+    }
+
     @media print {
       .no-print { display: none !important; }
       .print-only { display: block !important; }
@@ -25,83 +68,86 @@
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col antialiased">
 
-  <!-- Toast Notification Container -->
-  <div id="toast" class="fixed bottom-5 left-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 text-xs font-bold pointer-events-none">
+  <!-- کادر اعلان شناور (Toast) منطبق بر مرکز صفحه موبایل -->
+  <div id="toast" class="fixed bottom-24 sm:bottom-6 left-1/2 -translate-x-1/2 sm:left-6 sm:translate-x-0 z-50 transform translate-y-24 opacity-0 transition-all duration-300 bg-slate-900/95 backdrop-blur-md text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 text-xs font-bold pointer-events-none w-max max-w-[90vw]">
     <span id="toastIcon">✅</span>
     <span id="toastMsg">عملیات با موفقیت انجام شد.</span>
   </div>
 
-  <!-- Header -->
-  <header class="bg-indigo-700 text-white shadow-lg no-print">
-    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
-      <div class="flex items-center gap-3">
-        <div class="w-11 h-11 rounded-2xl bg-white/10 flex items-center justify-center font-black text-xl border border-white/20">۶</div>
+  <!-- هدر چسبان و مدرن -->
+  <header class="bg-indigo-700 text-white shadow-md no-print sticky top-0 z-30">
+    <div class="max-w-7xl mx-auto px-3.5 py-2.5 flex flex-wrap items-center justify-between gap-2.5">
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-white/10 flex items-center justify-center font-black text-lg sm:text-xl border border-white/20 shadow-inner">۶</div>
         <div>
-          <h1 class="text-base sm:text-lg font-black tracking-tight">دفتر کلاسی دیجیتال ششم الف</h1>
-          <p class="text-xs text-indigo-200">دبستان حاج فیض • سال تحصیلی ۱۴۰۵-۱۴۰۶ • آموزگار: محمد جواد کمالی سروستانی</p>
+          <h1 class="text-sm sm:text-base font-black tracking-tight">دفتر کلاسی ششم الف</h1>
+          <p class="text-[10px] sm:text-xs text-indigo-200">دبستان حاج فیض • آموزگار: محمد جواد کمالی سروستانی</p>
         </div>
       </div>
       
-      <div class="flex items-center gap-2">
-        <button onclick="backupAllData()" class="px-3 py-1.5 text-xs font-bold bg-white/10 hover:bg-white/20 rounded-xl transition flex items-center gap-1">
-          💾 پشتیبان‌گیری
+      <!-- دکمه‌های ابزار سریع -->
+      <div class="flex items-center gap-1.5 sm:gap-2">
+        <button onclick="backupAllData()" class="px-2.5 sm:px-3 py-1.5 text-[11px] sm:text-xs font-bold bg-white/10 hover:bg-white/20 rounded-xl transition flex items-center gap-1 touch-pop">
+          💾 <span class="hidden sm:inline">پشتیبان‌گیری</span>
         </button>
-        <button onclick="restorePrompt()" class="px-3 py-1.5 text-xs font-bold bg-white/10 hover:bg-white/20 rounded-xl transition flex items-center gap-1">
-          🔄 بازیابی
+        <button onclick="restorePrompt()" class="px-2.5 sm:px-3 py-1.5 text-[11px] sm:text-xs font-bold bg-white/10 hover:bg-white/20 rounded-xl transition flex items-center gap-1 touch-pop">
+          🔄 <span class="hidden sm:inline">بازیابی</span>
         </button>
-        <button onclick="resetAllToDefault()" class="px-3 py-1.5 text-xs font-bold bg-rose-600/80 hover:bg-rose-600 rounded-xl transition">
-          ♻️ ریست به ۴۰ دانش‌آموز رسمی
+        <button onclick="resetAllToDefault()" class="px-2.5 sm:px-3 py-1.5 text-[11px] sm:text-xs font-bold bg-rose-600/80 hover:bg-rose-600 rounded-xl transition touch-pop">
+          ♻️ <span class="hidden sm:inline">ریست به ۴۰ دانش‌آموز</span>
         </button>
       </div>
     </div>
 
-    <!-- Navigation Tabs -->
-    <nav class="bg-indigo-800/80 border-t border-indigo-600/40 px-4">
-      <div class="max-w-7xl mx-auto flex overflow-x-auto space-x-reverse space-x-2 py-2 text-xs sm:text-sm font-medium custom-scroll">
-        <button onclick="switchTab('homework')" id="tab-homework" class="tab-btn px-4 py-2 rounded-xl bg-white text-indigo-800 font-extrabold shadow-sm">📝 تکالیف جلسه‌ای</button>
-        <button onclick="switchTab('attendance')" id="tab-attendance" class="tab-btn px-4 py-2 rounded-xl text-white/80 hover:bg-white/10">⏱️ تقویم و حضور و غیاب</button>
-        <button onclick="switchTab('gamification')" id="tab-gamification" class="tab-btn px-4 py-2 rounded-xl text-white/80 hover:bg-white/10">⭐ تابلوی مثبت‌ها و امتیازات</button>
-        <button onclick="switchTab('groups')" id="tab-groups" class="tab-btn px-4 py-2 rounded-xl text-white/80 hover:bg-white/10">👥 گروه‌بندی تعاملی</button>
-        <button onclick="switchTab('eval')" id="tab-eval" class="tab-btn px-4 py-2 rounded-xl text-white/80 hover:bg-white/10">📊 جلسات ارزشیابی و نمرات</button>
-        <button onclick="switchTab('roster')" id="tab-roster" class="tab-btn px-4 py-2 rounded-xl text-white/80 hover:bg-white/10">📋 اسامی و کارنامه</button>
-        <button onclick="switchTab('picker')" id="tab-picker" class="tab-btn px-4 py-2 rounded-xl text-white/80 hover:bg-white/10">🎯 گردونه پرسش</button>
-        <button onclick="switchTab('timer')" id="tab-timer" class="tab-btn px-4 py-2 rounded-xl text-white/80 hover:bg-white/10">⏳ تایمر آزمون</button>
-        <button onclick="switchTab('parent-msg')" id="tab-parent-msg" class="tab-btn px-4 py-2 rounded-xl text-white/80 hover:bg-white/10">💬 پیام‌ساز شاد و اولیا</button>
+    <!-- نوار تب‌های دسکتاپ و تبلت (در موبایل مخفی است و نوار شستی پایین فعال می‌شود) -->
+    <nav class="bg-indigo-800/80 border-t border-indigo-600/40 px-4 hidden sm:block">
+      <div class="max-w-7xl mx-auto flex overflow-x-auto space-x-reverse space-x-2 py-2 text-xs font-medium custom-scroll">
+        <button onclick="switchTab('homework')" id="tab-homework" class="tab-btn px-4 py-2 rounded-xl bg-white text-indigo-800 font-extrabold shadow-sm touch-pop">📝 تکالیف جلسه‌ای</button>
+        <button onclick="switchTab('attendance')" id="tab-attendance" class="tab-btn px-4 py-2 rounded-xl text-white/80 hover:bg-white/10 touch-pop">⏱️ تقویم و حضور و غیاب</button>
+        <button onclick="switchTab('gamification')" id="tab-gamification" class="tab-btn px-4 py-2 rounded-xl text-white/80 hover:bg-white/10 touch-pop">⭐ تابلوی مثبت‌ها و امتیازات</button>
+        <button onclick="switchTab('groups')" id="tab-groups" class="tab-btn px-4 py-2 rounded-xl text-white/80 hover:bg-white/10 touch-pop">👥 گروه‌بندی تعاملی</button>
+        <button onclick="switchTab('eval')" id="tab-eval" class="tab-btn px-4 py-2 rounded-xl text-white/80 hover:bg-white/10 touch-pop">📊 جلسات ارزشیابی و نمرات</button>
+        <button onclick="switchTab('roster')" id="tab-roster" class="tab-btn px-4 py-2 rounded-xl text-white/80 hover:bg-white/10 touch-pop">📋 اسامی و کارنامه</button>
+        <button onclick="switchTab('picker')" id="tab-picker" class="tab-btn px-4 py-2 rounded-xl text-white/80 hover:bg-white/10 touch-pop">🎯 گردونه پرسش</button>
+        <button onclick="switchTab('timer')" id="tab-timer" class="tab-btn px-4 py-2 rounded-xl text-white/80 hover:bg-white/10 touch-pop">⏳ تایمر آزمون</button>
+        <button onclick="switchTab('parent-msg')" id="tab-parent-msg" class="tab-btn px-4 py-2 rounded-xl text-white/80 hover:bg-white/10 touch-pop">💬 پیام‌ساز شاد و اولیا</button>
       </div>
     </nav>
   </header>
 
-  <!-- Main View -->
-<!-- به کلاس تگ main مقدار pb-20 sm:pb-4 اضافه کنید -->
-<main class="max-w-7xl mx-auto p-4 pb-20 sm:pb-4 flex-1 w-full space-y-4">
+  <!-- کادر اصلی نمایش صفحات (با پدینگ انتهای صفحه برای نوار پایین موبایل) -->
+  <main class="max-w-7xl mx-auto p-3 sm:p-4 pb-24 sm:pb-6 flex-1 w-full space-y-4">
 
-    <!-- TAB 1: HOMEWORK SYSTEM -->
+    <!-- تب ۱: سامانه مدیریت تکالیف جلسه‌ای -->
     <section id="section-homework" class="tab-content space-y-4">
       <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
-        <div class="lg:col-span-1 bg-white rounded-2xl p-4 border border-slate-200 shadow-sm space-y-4 flex flex-col">
+        
+        <!-- سایدبار لیست جلسات تکالیف -->
+        <div class="lg:col-span-1 bg-white rounded-2xl p-4 border border-slate-200 shadow-sm space-y-3 flex flex-col">
           <div class="flex justify-between items-center border-b pb-2">
-            <h2 class="text-sm font-black text-slate-800">فهرست تکالیف کلاسی</h2>
-            <button onclick="openModal('newHwModal')" class="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold transition">
+            <h2 class="text-xs sm:text-sm font-black text-slate-800">فهرست تکالیف کلاسی</h2>
+            <button onclick="openModal('newHwModal')" class="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold transition touch-pop">
               + تکلیف جدید
             </button>
           </div>
-          <div id="hwSessionList" class="space-y-2 overflow-y-auto max-h-[600px] custom-scroll flex-1 pr-1"></div>
+          <div id="hwSessionList" class="space-y-2 overflow-y-auto max-h-[350px] lg:max-h-[600px] custom-scroll flex-1 pr-0.5"></div>
         </div>
 
+        <!-- جدول ثبت وضعیت تکلیف جاری -->
         <div class="lg:col-span-3 space-y-4">
           <div id="hwActiveHeader" class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-3">
             <div>
               <div class="flex items-center gap-2">
                 <span id="activeHwSubjectBadge" class="px-2.5 py-0.5 rounded-full text-xs font-black bg-indigo-100 text-indigo-700">ریاضی</span>
-                <h3 id="activeHwTitle" class="text-base font-extrabold text-slate-800">عنوان تکلیف</h3>
+                <h3 id="activeHwTitle" class="text-sm sm:text-base font-extrabold text-slate-800">عنوان تکلیف</h3>
               </div>
-              <p id="activeHwMeta" class="text-xs text-slate-500 mt-1">تاریخ: ---</p>
+              <p id="activeHwMeta" class="text-[11px] sm:text-xs text-slate-500 mt-1">تاریخ: ---</p>
             </div>
             <div class="flex flex-wrap items-center gap-2">
-              <button onclick="markAllActiveHw('انجام داده')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-sm transition">
+              <button onclick="markAllActiveHw('انجام داده')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-sm transition touch-pop">
                 ✅ تأیید همه (انجام شده)
               </button>
-              <button onclick="deleteActiveHomework()" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold rounded-xl transition">
+              <button onclick="deleteActiveHomework()" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold rounded-xl transition touch-pop">
                 🗑️ حذف این تکلیف
               </button>
             </div>
@@ -110,12 +156,12 @@
           <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
             <div class="overflow-x-auto max-h-[580px] custom-scroll">
               <table class="w-full text-right text-xs">
-                <thead class="bg-slate-50 sticky top-0 border-b border-slate-200 text-slate-600 font-bold">
+                <thead class="bg-slate-50 sticky top-0 border-b border-slate-200 text-slate-600 font-bold z-10">
                   <tr>
-                    <th class="p-3 w-12 text-center">ردیف</th>
-                    <th class="p-3 w-48">دانش‌آموز</th>
-                    <th class="p-3 w-64 text-center">وضعیت تکلیف</th>
-                    <th class="p-3">یادداشت و بازخورد معلم</th>
+                    <th class="p-3 w-10 text-center">ردیف</th>
+                    <th class="p-3 w-40 sm:w-48">دانش‌آموز</th>
+                    <th class="p-3 w-56 sm:w-64 text-center">وضعیت تکلیف</th>
+                    <th class="p-3 min-w-[140px]">یادداشت و بازخورد معلم</th>
                   </tr>
                 </thead>
                 <tbody id="hwTableBody" class="divide-y divide-slate-100"></tbody>
@@ -123,50 +169,54 @@
             </div>
           </div>
         </div>
+
       </div>
     </section>
 
-    <!-- TAB 2: ATTENDANCE SYSTEM -->
+    <!-- تب ۲: تقویم هوشمند و حضور و غیاب -->
     <section id="section-attendance" class="tab-content hidden space-y-4">
-      <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-4">
-        <div class="flex items-center gap-3">
-          <span class="text-xs font-black text-slate-700">📅 تاریخ جلسه:</span>
-          <div class="flex items-center gap-1 bg-slate-50 p-1.5 rounded-xl border border-slate-200">
-            <button onclick="changeAttendanceDay(-1)" class="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-slate-200 font-bold text-slate-600">‹</button>
-            <input type="text" id="attCurrentDate" readonly class="text-xs font-black text-center w-28 bg-transparent text-indigo-700">
-            <button onclick="changeAttendanceDay(1)" class="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-slate-200 font-bold text-slate-600">›</button>
+      <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-3">
+        
+        <!-- انتخابگر تاریخ شمسی -->
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-black text-slate-700">📅 جلسه:</span>
+          <div class="flex items-center gap-1 bg-slate-50 p-1 rounded-xl border border-slate-200">
+            <button onclick="changeAttendanceDay(-1)" class="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-slate-200 font-bold text-slate-600 touch-pop">‹</button>
+            <input type="text" id="attCurrentDate" readonly class="text-xs font-black text-center w-24 bg-transparent text-indigo-700">
+            <button onclick="changeAttendanceDay(1)" class="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-slate-200 font-bold text-slate-600 touch-pop">›</button>
           </div>
-          <button onclick="setAttendanceToToday()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition">
+          <button onclick="setAttendanceToToday()" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition touch-pop">
             امروز
           </button>
         </div>
 
-        <div class="flex items-center gap-3 text-xs">
-          <span class="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 font-extrabold border border-emerald-200">
-            حاضر: <strong id="statPresent" class="text-sm">۴۰</strong>
+        <!-- ریز آمار روزانه -->
+        <div class="flex items-center gap-2 text-xs">
+          <span class="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 font-extrabold border border-emerald-200">
+            حاضر: <strong id="statPresent" class="text-xs sm:text-sm">۴۰</strong>
           </span>
-          <span class="px-3 py-1 rounded-full bg-rose-50 text-rose-700 font-extrabold border border-rose-200">
-            غایب: <strong id="statAbsent" class="text-sm">۰</strong>
+          <span class="px-2.5 py-1 rounded-full bg-rose-50 text-rose-700 font-extrabold border border-rose-200">
+            غایب: <strong id="statAbsent" class="text-xs sm:text-sm">۰</strong>
           </span>
-          <span class="px-3 py-1 rounded-full bg-amber-50 text-amber-700 font-extrabold border border-amber-200">
-            تاخیر: <strong id="statLate" class="text-sm">۰</strong>
+          <span class="px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 font-extrabold border border-amber-200">
+            تاخیر: <strong id="statLate" class="text-xs sm:text-sm">۰</strong>
           </span>
         </div>
 
-        <button onclick="markAllAttendance('حاضر')" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-extrabold shadow-sm transition">
-          ✅ ثبت همه به عنوان حاضر
+        <button onclick="markAllAttendance('حاضر')" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-extrabold shadow-sm transition touch-pop">
+          ✅ ثبت همه حاضر
         </button>
       </div>
 
       <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
         <div class="overflow-x-auto max-h-[620px] custom-scroll">
           <table class="w-full text-right text-xs">
-            <thead class="bg-slate-50 sticky top-0 border-b border-slate-200 text-slate-600 font-bold">
+            <thead class="bg-slate-50 sticky top-0 border-b border-slate-200 text-slate-600 font-bold z-10">
               <tr>
-                <th class="p-3 w-12 text-center">ردیف</th>
-                <th class="p-3 w-48">دانش‌آموز</th>
-                <th class="p-3 w-60 text-center">وضعیت حضور</th>
-                <th class="p-3">علت غیبت یا توضیحات</th>
+                <th class="p-3 w-10 text-center">ردیف</th>
+                <th class="p-3 w-40 sm:w-48">دانش‌آموز</th>
+                <th class="p-3 w-52 sm:w-60 text-center">وضعیت حضور</th>
+                <th class="p-3 min-w-[140px]">علت غیبت یا توضیحات</th>
               </tr>
             </thead>
             <tbody id="attendanceTableBody" class="divide-y divide-slate-100"></tbody>
@@ -174,51 +224,50 @@
         </div>
       </div>
     </section>
-
-    <!-- TAB 3: GAMIFICATION / POINTS LEADERBOARD -->
+    <!-- تب ۳: تابلوی مثبت‌ها و لیگ فعالیت کلاسی -->
     <section id="section-gamification" class="tab-content hidden space-y-4">
       <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex flex-wrap justify-between items-center gap-3">
         <div>
           <h3 class="font-black text-sm text-slate-800">تابلوی مثبت‌ها و لیگ فعالیت کلاسی</h3>
-          <p class="text-xs text-slate-500">امتیازات ثبت‌شده بر اساس فعالیت‌های پای تخته، حل تمرین و رفتار مثبت</p>
+          <p class="text-[11px] sm:text-xs text-slate-500">امتیازات ثبت‌شده بر اساس فعالیت‌های پای تخته، حل تمرین و رفتار مثبت</p>
         </div>
-       <div class="flex items-center gap-2">
-        <label class="text-xs font-bold text-slate-600">نمایش بر اساس درس:</label>
-        <select id="leaderboardSubjectFilter" onchange="renderLeaderboard()" class="border rounded-xl px-3 py-1.5 text-xs font-bold bg-slate-50">
-          <option value="all">🌟 مجموع کل دروس</option>
-          <option value="math">ریاضی</option>
-          <option value="persian">فارسی و نگارش</option>
-          <option value="science">علوم تجربی</option>
-          <option value="quran">قرآن و هدیه‌ها</option>
-          <option value="social">مطالعات اجتماعی</option>
-          <option value="thinking">تفکر و پژوهش</option>
-          <option value="general">انضباطی و عمومی</option>
-        </select>
-        <button onclick="resetAllPointsPrompt()" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold rounded-xl transition">
-          🔄 صفر کردن ماهانه
-        </button>
+        <div class="flex items-center gap-2">
+          <label class="text-xs font-bold text-slate-600">درس:</label>
+          <select id="leaderboardSubjectFilter" onchange="renderLeaderboard()" class="border rounded-xl px-2.5 sm:px-3 py-1.5 text-xs font-bold bg-slate-50">
+            <option value="all">🌟 مجموع کل دروس</option>
+            <option value="math">ریاضی</option>
+            <option value="persian">فارسی و نگارش</option>
+            <option value="science">علوم تجربی</option>
+            <option value="quran">قرآن و هدیه‌ها</option>
+            <option value="social">مطالعات اجتماعی</option>
+            <option value="thinking">تفکر و پژوهش</option>
+            <option value="general">انضباطی و عمومی</option>
+          </select>
+          <button onclick="resetAllPointsPrompt()" class="px-2.5 sm:px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold rounded-xl transition touch-pop">
+            🔄 صفر کردن ماهانه
+          </button>
+        </div>
       </div>
-      
 
       <div id="leaderboardGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"></div>
     </section>
 
-    <!-- TAB 4: GROUPS -->
+    <!-- تب ۴: گروه‌بندی تعاملی و هوشمند -->
     <section id="section-groups" class="tab-content hidden space-y-4">
       <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-3">
-        <div class="flex flex-wrap items-center gap-3">
-          <label class="text-xs font-bold text-slate-600">گروه‌بندی خودکار بر اساس:</label>
-          <select id="groupCountSelect" class="border rounded-xl px-3 py-1.5 text-xs font-bold bg-slate-50">
+        <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+          <label class="text-xs font-bold text-slate-600">گروه‌بندی:</label>
+          <select id="groupCountSelect" class="border rounded-xl px-2.5 sm:px-3 py-1.5 text-xs font-bold bg-slate-50">
             <option value="8">۸ گروه (هر گروه ۵ نفر)</option>
             <option value="10">۱۰ گروه (هر گروه ۴ نفر)</option>
             <option value="6">۶ گروه (حدود ۶-۷ نفر)</option>
             <option value="5">۵ گروه (هر گروه ۸ نفر)</option>
           </select>
-          <button onclick="autoGenerateGroups()" class="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-extrabold transition">
-            ⚡ تولید تصادفی گروه‌ها
+          <button onclick="autoGenerateGroups()" class="px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-extrabold transition touch-pop">
+            ⚡ تولید تصادفی
           </button>
-          <button onclick="addNewCustomGroup()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold">
-            + افزودن گروه جدید
+          <button onclick="addNewCustomGroup()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold touch-pop">
+            + گروه جدید
           </button>
         </div>
         <div class="text-xs font-bold text-slate-500">
@@ -228,12 +277,12 @@
       <div id="groupsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"></div>
     </section>
 
-    <!-- TAB 5: EVALUATION -->
+    <!-- تب ۵: جلسات ارزشیابی، آزمون‌ها و نمرات -->
     <section id="section-eval" class="tab-content hidden space-y-4">
       <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-3">
-        <div class="flex flex-wrap items-center gap-3">
-          <label class="text-xs font-bold text-slate-600">انتخاب درس:</label>
-          <select id="evalSubjectSelect" onchange="renderEvalSection()" class="border rounded-xl px-3 py-1.5 text-xs font-bold bg-slate-50">
+        <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+          <label class="text-xs font-bold text-slate-600">درس:</label>
+          <select id="evalSubjectSelect" onchange="renderEvalSection()" class="border rounded-xl px-2.5 sm:px-3 py-1.5 text-xs font-bold bg-slate-50">
             <option value="math">ریاضی</option>
             <option value="persian">فارسی و نگارش</option>
             <option value="science">علوم تجربی</option>
@@ -242,13 +291,13 @@
             <option value="thinking">تفکر و پژوهش</option>
             <option value="tech">کار و فناوری</option>
           </select>
-          <label class="text-xs font-bold text-slate-600 mr-2">جلسه ارزیابی:</label>
-          <select id="evalSessionSelect" onchange="renderEvalTable()" class="border rounded-xl px-3 py-1.5 text-xs font-bold bg-slate-50"></select>
-          <button onclick="openModal('newEvalModal')" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition">
-            + تعریف آزمون/ارزیابی جدید
+          <label class="text-xs font-bold text-slate-600">جلسه:</label>
+          <select id="evalSessionSelect" onchange="renderEvalTable()" class="border rounded-xl px-2.5 sm:px-3 py-1.5 text-xs font-bold bg-slate-50 max-w-[180px] truncate"></select>
+          <button onclick="openModal('newEvalModal')" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition touch-pop">
+            + آزمون جدید
           </button>
         </div>
-        <button onclick="exportEvalToCSV()" class="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-sm transition">
+        <button onclick="exportEvalToCSV()" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-sm transition touch-pop">
           📊 خروجی اکسل / سیدا
         </button>
       </div>
@@ -256,13 +305,13 @@
       <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
         <div class="overflow-x-auto max-h-[620px] custom-scroll">
           <table class="w-full text-right text-xs">
-            <thead class="bg-slate-50 sticky top-0 border-b border-slate-200 text-slate-600 font-bold">
+            <thead class="bg-slate-50 sticky top-0 border-b border-slate-200 text-slate-600 font-bold z-10">
               <tr>
-                <th class="p-3 w-12 text-center">ردیف</th>
-                <th class="p-3 w-48">دانش‌آموز</th>
-                <th class="p-3 w-44 text-center">سطح توصیفی</th>
-                <th class="p-3 w-32 text-center">نمره کمی (از ۲۰)</th>
-                <th class="p-3">یادداشت عملکرد</th>
+                <th class="p-3 w-10 text-center">ردیف</th>
+                <th class="p-3 w-40 sm:w-48">دانش‌آموز</th>
+                <th class="p-3 w-36 sm:w-44 text-center">سطح توصیفی</th>
+                <th class="p-3 w-28 sm:w-32 text-center">نمره کمی (از ۲۰)</th>
+                <th class="p-3 min-w-[140px]">یادداشت عملکرد</th>
               </tr>
             </thead>
             <tbody id="evalTableBody" class="divide-y divide-slate-100"></tbody>
@@ -271,10 +320,10 @@
       </div>
     </section>
 
-    <!-- TAB 6: ROSTER -->
+    <!-- تب ۶: لیست اسامی کلاسی و کارنامه جامع -->
     <section id="section-roster" class="tab-content hidden space-y-4">
       <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-3">
-        <input type="text" id="rosterSearch" oninput="renderRoster()" placeholder="جستجوی نام یا کدملی دانش‌آموز..." class="border rounded-xl px-3 py-2 text-xs w-64 focus:ring-2 focus:ring-indigo-500">
+        <input type="text" id="rosterSearch" oninput="renderRoster()" placeholder="جستجوی نام یا کدملی..." class="border rounded-xl px-3 py-1.5 sm:py-2 text-xs w-56 sm:w-64 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
         <div class="text-xs font-bold text-slate-600">
           کل دانش‌آموزان: <span class="text-indigo-600 font-black">۴۰</span> نفر
         </div>
@@ -283,16 +332,16 @@
       <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
         <div class="overflow-x-auto">
           <table class="w-full text-right text-xs">
-            <thead class="bg-slate-50 border-b border-slate-200 text-slate-600 font-bold">
+            <thead class="bg-slate-50 border-b border-slate-200 text-slate-600 font-bold z-10">
               <tr>
-                <th class="p-3 w-12 text-center">ردیف</th>
-                <th class="p-3 w-36">کد دانش‌آموزی</th>
+                <th class="p-3 w-10 text-center">ردیف</th>
+                <th class="p-3 w-32 sm:w-36">کد دانش‌آموزی</th>
                 <th class="p-3">نام خانوادگی و نام</th>
-                <th class="p-3 w-32">نام پدر</th>
-                <th class="p-3 w-28 text-center">مثبت کلاسی</th>
-                <th class="p-3 w-28 text-center">کل غیبت‌ها</th>
-                <th class="p-3 w-32 text-center">تکالیف انجام‌نشده</th>
-                <th class="p-3 w-28 text-center">مشاهده پرونده</th>
+                <th class="p-3 w-28 sm:w-32">نام پدر</th>
+                <th class="p-3 w-24 sm:w-28 text-center">مثبت کلاسی</th>
+                <th class="p-3 w-24 sm:w-28 text-center">کل غیبت‌ها</th>
+                <th class="p-3 w-28 sm:w-32 text-center">تکالیف انجام‌نشده</th>
+                <th class="p-3 w-24 sm:w-28 text-center">پرونده</th>
               </tr>
             </thead>
             <tbody id="rosterTableBody" class="divide-y divide-slate-100"></tbody>
@@ -300,15 +349,18 @@
         </div>
       </div>
     </section>
-
-    <!-- TAB 7: PICKER -->
+    <!-- تب ۷: گردونه شانس و انتخاب تصادفی دانش‌آموز -->
     <section id="section-picker" class="tab-content hidden">
-      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 max-w-xl mx-auto text-center space-y-6">
-        <h2 class="text-lg font-black text-slate-800">گردونه هوشمند انتخاب تصادفی</h2>
-        <!-- انتخاب درس برای پرسش شفاهی -->
-        <div class="flex items-center justify-center gap-2 mb-2">
+      <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-6 sm:p-8 max-w-xl mx-auto text-center space-y-5">
+        <div>
+          <h2 class="text-base sm:text-lg font-black text-slate-800">گردونه هوشمند انتخاب تصادفی</h2>
+          <p class="text-[11px] sm:text-xs text-slate-500 mt-0.5">پرسش شفاهی، حل تمرین پای تخته و اعطای مثبت مستقیم</p>
+        </div>
+
+        <!-- انتخاب درس مورد پرسش -->
+        <div class="flex items-center justify-center gap-2">
           <label class="text-xs font-bold text-slate-600">درس مورد پرسش:</label>
-          <select id="pickerSubjectSelect" class="border rounded-xl px-3 py-1.5 text-xs font-bold bg-white text-indigo-700 focus:ring-2 focus:ring-indigo-500">
+          <select id="pickerSubjectSelect" class="border rounded-xl px-3 py-1.5 text-xs font-bold bg-slate-50 text-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
             <option value="math">ریاضی</option>
             <option value="persian">فارسی و نگارش</option>
             <option value="science">علوم تجربی</option>
@@ -318,51 +370,58 @@
             <option value="general">انضباطی و عمومی</option>
           </select>
         </div>
-        <div id="pickerBox" class="h-48 flex flex-col items-center justify-center bg-indigo-50/50 rounded-2xl border-2 border-dashed border-indigo-200 p-4">
-          <span class="text-2xl font-black text-indigo-700">آماده برای شروع</span>
+
+        <div id="pickerBox" class="h-44 sm:h-48 flex flex-col items-center justify-center bg-indigo-50/60 rounded-2xl border-2 border-dashed border-indigo-200 p-4 transition-all">
+          <span class="text-xl sm:text-2xl font-black text-indigo-700">آماده برای شروع</span>
         </div>
-        <div class="flex justify-center gap-3">
-          <button onclick="rollPicker()" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-sm rounded-xl shadow-lg transition active:scale-95">
+
+        <div class="flex justify-center gap-2.5">
+          <button onclick="rollPicker()" class="px-5 sm:px-6 py-2.5 sm:py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs sm:text-sm rounded-xl shadow-lg shadow-indigo-200 transition touch-pop">
             🎯 انتخاب دانش‌آموز بعدی
           </button>
-          <button onclick="resetPicker()" class="px-4 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl">
-            🔄 شروع دور جدید
+          <button onclick="resetPicker()" class="px-3.5 sm:px-4 py-2.5 sm:py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl touch-pop">
+            🔄 دور جدید
           </button>
         </div>
-        <div class="text-xs text-slate-500">
+
+        <div class="text-[11px] sm:text-xs text-slate-500 pt-1">
           پاسخ داده‌اند: <span id="pickedBadge" class="font-bold text-indigo-600">۰</span> از ۴۰ نفر
         </div>
       </div>
     </section>
 
-    <!-- TAB 8: TIMER -->
+    <!-- تب ۸: تایمر کلاسی و آزمون زمان‌دار -->
     <section id="section-timer" class="tab-content hidden">
-      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 max-w-md mx-auto text-center space-y-6">
-        <h2 class="text-lg font-black text-slate-800">تایمر کلاسی و آزمون</h2>
-        <div id="timerText" class="text-6xl font-black text-indigo-700 font-mono">۱۵:۰۰</div>
-        <div class="flex justify-center gap-2">
-          <button onclick="setTimerSec(5*60)" class="px-3 py-1 bg-slate-100 rounded-lg text-xs font-bold hover:bg-indigo-50">۵ دقیقه</button>
-          <button onclick="setTimerSec(15*60)" class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-lg text-xs font-bold">۱۵ دقیقه</button>
-          <button onclick="setTimerSec(30*60)" class="px-3 py-1 bg-slate-100 rounded-lg text-xs font-bold hover:bg-indigo-50">۳۰ دقیقه</button>
+      <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-6 sm:p-8 max-w-md mx-auto text-center space-y-6">
+        <h2 class="text-base sm:text-lg font-black text-slate-800">تایمر تمرین و آزمون کلاسی</h2>
+        
+        <div id="timerText" class="text-5xl sm:text-6xl font-black text-indigo-700 font-mono tracking-wider">۱۵:۰۰</div>
+
+        <div class="flex justify-center gap-1.5 sm:gap-2">
+          <button onclick="setTimerSec(5*60)" class="px-3 py-1 bg-slate-100 rounded-xl text-xs font-bold hover:bg-indigo-50 touch-pop">۵ دقیقه</button>
+          <button onclick="setTimerSec(10*60)" class="px-3 py-1 bg-slate-100 rounded-xl text-xs font-bold hover:bg-indigo-50 touch-pop">۱۰ دقیقه</button>
+          <button onclick="setTimerSec(15*60)" class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-xl text-xs font-black touch-pop">۱۵ دقیقه</button>
+          <button onclick="setTimerSec(30*60)" class="px-3 py-1 bg-slate-100 rounded-xl text-xs font-bold hover:bg-indigo-50 touch-pop">۳۰ دقیقه</button>
         </div>
-        <div class="flex justify-center gap-3">
-          <button onclick="toggleTimer()" id="timerBtn" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow transition">
+
+        <div class="flex justify-center gap-2.5">
+          <button onclick="toggleTimer()" id="timerBtn" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs sm:text-sm rounded-xl shadow-md transition touch-pop">
             ▶️ شروع زمان
           </button>
-          <button onclick="resetTimer()" class="px-4 py-2.5 bg-slate-200 text-slate-700 font-bold text-xs rounded-xl">
+          <button onclick="resetTimer()" class="px-4 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs rounded-xl touch-pop">
             ⏹️ بازنشانی
           </button>
         </div>
       </div>
     </section>
 
-<!-- TAB: SMART PARENT & SHAD MESSAGE GENERATOR -->
+    <!-- تب ۹: پیام‌ساز هوشمند شاد و اولیا -->
     <section id="section-parent-msg" class="tab-content hidden space-y-4">
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
         
         <!-- ستون تنظیمات و انتخاب دانش‌آموز -->
-        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-          <h3 class="font-black text-sm text-slate-800 border-b pb-2">تنظیمات پیام هوشمند</h3>
+        <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+          <h3 class="font-black text-xs sm:text-sm text-slate-800 border-b pb-2">تنظیمات گزارش اولیا</h3>
           
           <div>
             <label class="block text-xs font-bold text-slate-600 mb-1">انتخاب دانش‌آموز:</label>
@@ -372,7 +431,7 @@
           <div>
             <label class="block text-xs font-bold text-slate-600 mb-1">نوع قالب پیام:</label>
             <select id="msgTemplateSelect" onchange="updateGeneratedMessage()" class="w-full border rounded-xl p-2 text-xs font-bold bg-slate-50">
-              <option value="weekly">📊 گزارش جامع وضعیت کلاسی (هفتگی/ماهانه)</option>
+              <option value="weekly">📊 گزارش روند کلاسی (هفتگی/ماهانه)</option>
               <option value="today_absent">🚨 اطلاع‌رسانی غیبت جلسه امروز</option>
               <option value="homework_warning">📝 پیگیری تکالیف انجام‌نشده یا ناقص</option>
               <option value="encourage">⭐ پیام تشویقی و تقدیر از پیشرفت</option>
@@ -381,12 +440,12 @@
 
           <!-- پیام‌های سریع گروهی بر اساس وضعیت امروز -->
           <div class="pt-3 border-t space-y-2">
-            <span class="text-xs font-bold text-slate-500 block">اقدام سریع گروهی (امروز):</span>
-            <button onclick="loadFastMessages('absent')" class="w-full text-right px-3 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-xl text-xs font-bold transition flex justify-between items-center">
+            <span class="text-[11px] font-bold text-slate-500 block">اقدام سریع گروهی (امروز):</span>
+            <button onclick="loadFastMessages('absent')" class="w-full text-right px-3 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-xl text-xs font-bold transition flex justify-between items-center touch-pop">
               <span>غایبین امروز کلاس</span>
               <span id="badgeFastAbsent" class="text-[10px] bg-rose-200 px-1.5 py-0.5 rounded-full font-mono">۰</span>
             </button>
-            <button onclick="loadFastMessages('hw_issues')" class="w-full text-right px-3 py-2 bg-amber-50 hover:bg-amber-100 text-amber-800 rounded-xl text-xs font-bold transition flex justify-between items-center">
+            <button onclick="loadFastMessages('hw_issues')" class="w-full text-right px-3 py-2 bg-amber-50 hover:bg-amber-100 text-amber-800 rounded-xl text-xs font-bold transition flex justify-between items-center touch-pop">
               <span>نقص تکلیف در جلسه جاری</span>
               <span id="badgeFastHw" class="text-[10px] bg-amber-200 px-1.5 py-0.5 rounded-full font-mono">۰</span>
             </button>
@@ -394,22 +453,20 @@
         </div>
 
         <!-- ستون پیش‌نمایش و ارسال پیام -->
-        <div class="lg:col-span-2 bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3 flex flex-col justify-between">
+        <div class="lg:col-span-2 bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3 flex flex-col justify-between">
           <div>
             <div class="flex justify-between items-center border-b pb-2 mb-2">
-              <span class="font-black text-xs text-indigo-700">متن پیام آماده برای شاد یا پیامک</span>
-              <span class="text-[11px] text-slate-400 font-bold" id="msgCharCount">تعداد حروف: ۰</span>
+              <span class="font-black text-xs text-indigo-700">متن پیام آماده برای ارسال در شاد یا پیامک</span>
+              <span class="text-[10px] sm:text-[11px] text-slate-400 font-bold" id="msgCharCount">تعداد حروف: ۰</span>
             </div>
             <textarea id="generatedMsgBox" rows="9" class="w-full border border-slate-200 rounded-xl p-3 text-xs leading-relaxed font-sans text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 custom-scroll bg-slate-50/50" placeholder="متن پیام در اینجا ایجاد می‌شود..."></textarea>
           </div>
 
           <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t">
-            <span class="text-[11px] text-slate-500">متن به صورت خودکار با داده‌های ثبت‌شده دانش‌آموز پر می‌شود و قابل ویرایش دستی است.</span>
-            <div class="flex gap-2">
-              <button onclick="copyGeneratedMessage()" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-extrabold shadow-sm transition flex items-center gap-1.5 active:scale-95">
-                <span>📋 کپی متن پیام</span>
-              </button>
-            </div>
+            <span class="text-[10px] sm:text-[11px] text-slate-500">متن به صورت خودکار بر اساس شواهد واقعی دانش‌آموز تکمیل می‌گردد.</span>
+            <button onclick="copyGeneratedMessage()" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-extrabold shadow-sm transition flex items-center gap-1.5 touch-pop">
+              <span>📋 کپی متن پیام</span>
+            </button>
           </div>
         </div>
 
@@ -421,12 +478,17 @@
         <div id="fastMsgList" class="grid grid-cols-1 md:grid-cols-2 gap-2"></div>
       </div>
     </section>
+
   </main>
 
-  <!-- MODALS -->
-  <div id="newHwModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
-      <h3 class="font-extrabold text-slate-800 text-base">تعریف تکلیف کلاسی جدید</h3>
+  <!-- ========================================================================= -->
+  <!-- MODALS (با طراحی ریسپانسیو و حالت Bottom-Sheet در موبایل)                    -->
+  <!-- ========================================================================= -->
+
+  <!-- مودال ۱: تعریف تکلیف کلاسی جدید -->
+  <div id="newHwModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-3 hidden mobile-bottom-sheet">
+    <div class="bg-white rounded-3xl max-w-md w-full p-5 space-y-4 shadow-2xl">
+      <h3 class="font-extrabold text-slate-800 text-sm sm:text-base">تعریف تکلیف کلاسی جدید</h3>
       <div class="space-y-3 text-xs">
         <div>
           <label class="block font-bold text-slate-600 mb-1">درس:</label>
@@ -450,15 +512,16 @@
         </div>
       </div>
       <div class="flex justify-end gap-2 pt-2">
-        <button onclick="closeModal('newHwModal')" class="px-4 py-2 bg-slate-100 rounded-xl font-bold text-xs">انصراف</button>
-        <button onclick="createHomeworkSession()" class="px-5 py-2 bg-indigo-600 text-white rounded-xl font-extrabold text-xs">ایجاد و ثبت</button>
+        <button onclick="closeModal('newHwModal')" class="px-4 py-2 bg-slate-100 rounded-xl font-bold text-xs touch-pop">انصراف</button>
+        <button onclick="createHomeworkSession()" class="px-5 py-2 bg-indigo-600 text-white rounded-xl font-extrabold text-xs touch-pop">ایجاد و ثبت</button>
       </div>
     </div>
   </div>
 
-  <div id="newEvalModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
-      <h3 class="font-extrabold text-slate-800 text-base">تعریف عنوان ارزشیابی جدید</h3>
+  <!-- مودال ۲: تعریف عنوان ارزشیابی جدید -->
+  <div id="newEvalModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-3 hidden mobile-bottom-sheet">
+    <div class="bg-white rounded-3xl max-w-md w-full p-5 space-y-4 shadow-2xl">
+      <h3 class="font-extrabold text-slate-800 text-sm sm:text-base">تعریف عنوان ارزشیابی جدید</h3>
       <div class="space-y-3 text-xs">
         <div>
           <label class="block font-bold text-slate-600 mb-1">عنوان آزمون یا فرصت ارزیابی:</label>
@@ -470,81 +533,81 @@
         </div>
       </div>
       <div class="flex justify-end gap-2 pt-2">
-        <button onclick="closeModal('newEvalModal')" class="px-4 py-2 bg-slate-100 rounded-xl font-bold text-xs">انصراف</button>
-        <button onclick="createEvalSession()" class="px-5 py-2 bg-indigo-600 text-white rounded-xl font-extrabold text-xs">ایجاد</button>
+        <button onclick="closeModal('newEvalModal')" class="px-4 py-2 bg-slate-100 rounded-xl font-bold text-xs touch-pop">انصراف</button>
+        <button onclick="createEvalSession()" class="px-5 py-2 bg-indigo-600 text-white rounded-xl font-extrabold text-xs touch-pop">ایجاد</button>
       </div>
     </div>
   </div>
 
-<!-- MODAL: ADVANCED COMPREHENSIVE STUDENT DOSSIER -->
-  <div id="studentProfileModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4 hidden">
+  <!-- مودال ۳: پرونده همه‌جانبه دانش‌آموز (Dossier) -->
+  <div id="studentProfileModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4 hidden mobile-bottom-sheet">
     <div class="bg-white rounded-3xl max-w-4xl w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden border border-slate-200">
       
       <!-- هدر پرونده -->
-      <div class="bg-slate-900 text-white p-5 flex flex-wrap justify-between items-center gap-4">
+      <div class="bg-slate-900 text-white p-4 sm:p-5 flex flex-wrap justify-between items-center gap-3">
         <div class="flex items-center gap-3">
-          <div class="w-12 h-12 rounded-2xl bg-indigo-600 flex items-center justify-center font-black text-xl text-white shadow-inner" id="profAvatar">
+          <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-indigo-600 flex items-center justify-center font-black text-lg sm:text-xl text-white shadow-inner" id="profAvatar">
             ۶
           </div>
           <div>
             <div class="flex items-center gap-2">
-              <h3 id="profName" class="font-black text-base sm:text-lg">نام دانش‌آموز</h3>
-              <span id="profPointsBadge" class="px-2.5 py-0.5 rounded-full text-xs font-black bg-amber-400 text-slate-950">⭐ ۰ مثبت</span>
+              <h3 id="profName" class="font-black text-sm sm:text-lg">نام دانش‌آموز</h3>
+              <span id="profPointsBadge" class="px-2.5 py-0.5 rounded-full text-[11px] sm:text-xs font-black bg-amber-400 text-slate-950">⭐ ۰ مثبت</span>
             </div>
-            <p id="profMeta" class="text-xs text-slate-400 mt-0.5">کد دانش‌آموزی: --- | نام پدر: ---</p>
+            <p id="profMeta" class="text-[10px] sm:text-xs text-slate-400 mt-0.5">کد دانش‌آموزی: --- | نام پدر: ---</p>
           </div>
         </div>
 
         <div class="flex items-center gap-2">
-          <button onclick="printStudentDossier()" class="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold transition flex items-center gap-1">
-            🖨️ چاپ پرونده انفرادی
+          <button onclick="printStudentDossier()" class="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold transition flex items-center gap-1 touch-pop">
+            🖨️ <span class="hidden sm:inline">چاپ پرونده</span>
           </button>
-          <button onclick="closeModal('studentProfileModal')" class="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white flex items-center justify-center text-lg font-bold">
+          <button onclick="closeModal('studentProfileModal')" class="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white flex items-center justify-center text-lg font-bold touch-pop">
             &times;
           </button>
         </div>
       </div>
 
       <!-- کارت‌های آماری شاخص کلیدی در یک نگاه -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 p-4 bg-slate-50 border-b border-slate-200 text-center">
-        <div class="bg-white p-2.5 rounded-2xl border border-slate-200 shadow-sm">
-          <span class="text-[11px] text-slate-500 font-bold block">مجموع غیبت‌ها</span>
-          <span id="profStatAbsent" class="text-base font-black text-rose-600">۰ جلسه</span>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 p-3 sm:p-4 bg-slate-50 border-b border-slate-200 text-center">
+        <div class="bg-white p-2 sm:p-2.5 rounded-2xl border border-slate-200 shadow-sm">
+          <span class="text-[10px] sm:text-[11px] text-slate-500 font-bold block">مجموع غیبت‌ها</span>
+          <span id="profStatAbsent" class="text-sm sm:text-base font-black text-rose-600">۰ جلسه</span>
         </div>
-        <div class="bg-white p-2.5 rounded-2xl border border-slate-200 shadow-sm">
-          <span class="text-[11px] text-slate-500 font-bold block">نقص یا عدم تحویل تکلیف</span>
-          <span id="profStatHw" class="text-base font-black text-amber-600">۰ مورد</span>
+        <div class="bg-white p-2 sm:p-2.5 rounded-2xl border border-slate-200 shadow-sm">
+          <span class="text-[10px] sm:text-[11px] text-slate-500 font-bold block">نقص تکالیف</span>
+          <span id="profStatHw" class="text-sm sm:text-base font-black text-amber-600">۰ مورد</span>
         </div>
-        <div class="bg-white p-2.5 rounded-2xl border border-slate-200 shadow-sm">
-          <span class="text-[11px] text-slate-500 font-bold block">امتیاز فعالیت کلاسی</span>
-          <span id="profStatPoints" class="text-base font-black text-emerald-600">۰ امتیاز</span>
+        <div class="bg-white p-2 sm:p-2.5 rounded-2xl border border-slate-200 shadow-sm">
+          <span class="text-[10px] sm:text-[11px] text-slate-500 font-bold block">امتیاز کل</span>
+          <span id="profStatPoints" class="text-sm sm:text-base font-black text-emerald-600">۰ امتیاز</span>
         </div>
-        <div class="bg-white p-2.5 rounded-2xl border border-slate-200 shadow-sm">
-          <span class="text-[11px] text-slate-500 font-bold block">یادداشت‌های ثبت‌شده</span>
-          <span id="profStatNotes" class="text-base font-black text-indigo-600">۰ یادداشت</span>
+        <div class="bg-white p-2 sm:p-2.5 rounded-2xl border border-slate-200 shadow-sm">
+          <span class="text-[10px] sm:text-[11px] text-slate-500 font-bold block">یادداشت‌ها</span>
+          <span id="profStatNotes" class="text-sm sm:text-base font-black text-indigo-600">۰ یادداشت</span>
         </div>
       </div>
 
       <!-- تب‌های داخلی پرونده -->
-      <div class="flex border-b border-slate-200 px-4 pt-2 bg-white gap-2 text-xs font-bold overflow-x-auto">
-        <button onclick="switchDossierTab('notes')" id="dossierTab-notes" class="dossier-tab-btn px-4 py-2 rounded-t-xl bg-indigo-50 text-indigo-700 border-b-2 border-indigo-600">
-          📝 وقایع‌نگاری و یادداشت‌های رفتاری / اولیا
+      <div class="flex border-b border-slate-200 px-3 sm:px-4 pt-2 bg-white gap-1.5 sm:gap-2 text-[11px] sm:text-xs font-bold overflow-x-auto no-scrollbar">
+        <button onclick="switchDossierTab('notes')" id="dossierTab-notes" class="dossier-tab-btn px-3 sm:px-4 py-2 rounded-t-xl bg-indigo-50 text-indigo-700 border-b-2 border-indigo-600 whitespace-nowrap">
+          📝 وقایع‌نگاری و رفتار
         </button>
-        <button onclick="switchDossierTab('grades')" id="dossierTab-grades" class="dossier-tab-btn px-4 py-2 rounded-t-xl text-slate-500 hover:text-slate-800">
-          📊 کارنامه جامع دروس
+        <button onclick="switchDossierTab('grades')" id="dossierTab-grades" class="dossier-tab-btn px-3 sm:px-4 py-2 rounded-t-xl text-slate-500 hover:text-slate-800 whitespace-nowrap">
+          📊 کارنامه دروس
         </button>
-        <button onclick="switchDossierTab('logs')" id="dossierTab-logs" class="dossier-tab-btn px-4 py-2 rounded-t-xl text-slate-500 hover:text-slate-800">
-          ⏱️ ریز سوابق غیبت و تکالیف
+        <button onclick="switchDossierTab('logs')" id="dossierTab-logs" class="dossier-tab-btn px-3 sm:px-4 py-2 rounded-t-xl text-slate-500 hover:text-slate-800 whitespace-nowrap">
+          ⏱️ سوابق غیبت و تکالیف
         </button>
       </div>
 
-      <!-- محتوای تب‌ها -->
-      <div class="p-4 overflow-y-auto custom-scroll flex-1 space-y-4 bg-white" id="dossierPrintArea">
+      <!-- محتوای تب‌های پرونده -->
+      <div class="p-3 sm:p-4 overflow-y-auto custom-scroll flex-1 space-y-4 bg-white" id="dossierPrintArea">
         
         <!-- تب ۱: یادداشت‌ها و وقایع‌نگاری کلاسی -->
         <div id="dossierSec-notes" class="dossier-sec space-y-4">
           <!-- فرم ثبت یادداشت جدید -->
-          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+          <div class="p-3 sm:p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
             <h4 class="font-extrabold text-xs text-slate-800 flex items-center gap-1.5">
               <span>✍️</span> ثبت مشاهده رفتار، گفت‌وگو با ولی یا نکته آموزشی
             </h4>
@@ -557,7 +620,7 @@
                 <option value="پزشکی و سلامت">🩺 سلامت و بهداشت</option>
               </select>
               <input type="text" id="newNoteDate" class="border rounded-xl p-2 text-xs font-bold font-mono bg-white" placeholder="تاریخ شمسی">
-              <button onclick="saveStudentNote()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition">
+              <button onclick="saveStudentNote()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition touch-pop">
                 + ذخیره در پرونده
               </button>
             </div>
@@ -567,9 +630,7 @@
           <!-- لیست یادداشت‌های گذشته -->
           <div class="space-y-2">
             <h4 class="font-black text-xs text-slate-700">تاریخچه وقایع و یادداشت‌های ثبت‌شده:</h4>
-            <div id="profNotesContainer" class="space-y-2 max-h-56 overflow-y-auto custom-scroll pr-1">
-              <!-- جاوااسکریپت پر می‌کند -->
-            </div>
+            <div id="profNotesContainer" class="space-y-2 max-h-52 sm:max-h-56 overflow-y-auto custom-scroll pr-0.5"></div>
           </div>
         </div>
 
@@ -580,8 +641,8 @@
               <thead class="bg-slate-50 font-bold text-slate-600 border-b">
                 <tr>
                   <th class="p-3">عنوان درس</th>
-                  <th class="p-3 w-40 text-center">آخرین سطح توصیفی</th>
-                  <th class="p-3 w-28 text-center">نمره عددی</th>
+                  <th class="p-3 w-36 sm:w-40 text-center">سطح توصیفی</th>
+                  <th class="p-3 w-24 sm:w-28 text-center">نمره عددی</th>
                   <th class="p-3">آخرین بازخورد معلم</th>
                 </tr>
               </thead>
@@ -592,24 +653,24 @@
 
         <!-- تب ۳: ریز جلسات غیبت و نقص تکلیف -->
         <div id="dossierSec-logs" class="dossier-sec hidden space-y-4">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
             
             <!-- ریز غیبت‌ها -->
             <div class="border border-slate-200 rounded-2xl p-3 bg-slate-50/50 space-y-2">
               <h5 class="font-bold text-xs text-rose-700 flex items-center justify-between">
                 <span>🚨 روزهای غیبت یا تاخیر:</span>
-                <span id="profLogAbsentCount" class="text-[11px] font-mono bg-rose-100 text-rose-800 px-2 py-0.5 rounded-full">۰</span>
+                <span id="profLogAbsentCount" class="text-[10px] sm:text-[11px] font-mono bg-rose-100 text-rose-800 px-2 py-0.5 rounded-full">۰</span>
               </h5>
-              <div id="profLogAbsentList" class="space-y-1.5 max-h-52 overflow-y-auto custom-scroll text-xs"></div>
+              <div id="profLogAbsentList" class="space-y-1.5 max-h-48 sm:max-h-52 overflow-y-auto custom-scroll text-xs"></div>
             </div>
 
             <!-- ریز تکالیف -->
             <div class="border border-slate-200 rounded-2xl p-3 bg-slate-50/50 space-y-2">
               <h5 class="font-bold text-xs text-amber-700 flex items-center justify-between">
-                <span>📝 وضعیت تکالیف ناقص یا تحویل‌نشده:</span>
-                <span id="profLogHwCount" class="text-[11px] font-mono bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full">۰</span>
+                <span>📝 تکالیف ناقص یا تحویل‌نشده:</span>
+                <span id="profLogHwCount" class="text-[10px] sm:text-[11px] font-mono bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full">۰</span>
               </h5>
-              <div id="profLogHwList" class="space-y-1.5 max-h-52 overflow-y-auto custom-scroll text-xs"></div>
+              <div id="profLogHwList" class="space-y-1.5 max-h-48 sm:max-h-52 overflow-y-auto custom-scroll text-xs"></div>
             </div>
 
           </div>
@@ -619,8 +680,8 @@
 
       <!-- فوتر پرونده -->
       <div class="p-3 bg-slate-50 border-t border-slate-200 flex justify-between items-center text-xs">
-        <span class="text-slate-500 text-[11px]">دفتر پرونده فرآیندی پایه ششم الف • دبستان حاج فیض</span>
-        <button onclick="closeModal('studentProfileModal')" class="px-5 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-xl font-bold transition">
+        <span class="text-slate-500 text-[10px] sm:text-[11px]">دفتر پرونده فرآیندی پایه ششم الف • دبستان حاج فیض</span>
+        <button onclick="closeModal('studentProfileModal')" class="px-5 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-xl font-bold transition touch-pop">
           بستن پرونده
         </button>
       </div>
@@ -628,44 +689,59 @@
     </div>
   </div>
 
-  <!-- فراخوانی استاندارد اسکریپت‌های ماژولار -->
+  <!-- نوار ابزار شستی پایین صفحه ویژه گوشی‌های هوشمند (Native Mobile Bottom Bar) -->
+  <nav class="mobile-bottom-nav fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-slate-200/90 z-40 sm:hidden shadow-[0_-4px_25px_rgba(0,0,0,0.06)]">
+    <div class="flex justify-around items-center px-1.5 py-1">
+      
+      <button onclick="switchTab('homework')" id="mob-tab-homework" class="mob-btn flex flex-col items-center gap-0.5 p-1.5 rounded-2xl text-slate-500 transition touch-pop">
+        <span class="text-lg">📝</span>
+        <span class="text-[10px] font-bold">تکالیف</span>
+      </button>
+
+      <button onclick="switchTab('attendance')" id="mob-tab-attendance" class="mob-btn flex flex-col items-center gap-0.5 p-1.5 rounded-2xl text-slate-500 transition touch-pop">
+        <span class="text-lg">⏱️</span>
+        <span class="text-[10px] font-bold">حضور</span>
+      </button>
+
+      <!-- دکمه برجسته وسط برای پرسش و گردونه -->
+      <button onclick="switchTab('picker')" id="mob-tab-picker" class="mob-btn flex flex-col items-center gap-0.5 -mt-4 touch-pop">
+        <div class="w-12 h-12 bg-gradient-to-tr from-indigo-700 to-indigo-500 text-white rounded-full flex items-center justify-center shadow-lg shadow-indigo-300 ring-4 ring-white">
+          <span class="text-xl">🎯</span>
+        </div>
+        <span class="text-[10px] font-black text-indigo-700">پرسش</span>
+      </button>
+
+      <button onclick="switchTab('gamification')" id="mob-tab-gamification" class="mob-btn flex flex-col items-center gap-0.5 p-1.5 rounded-2xl text-slate-500 transition touch-pop">
+        <span class="text-lg">⭐</span>
+        <span class="text-[10px] font-bold">مثبت‌ها</span>
+      </button>
+
+      <button onclick="switchTab('parent-msg')" id="mob-tab-parent-msg" class="mob-btn flex flex-col items-center gap-0.5 p-1.5 rounded-2xl text-slate-500 transition touch-pop">
+        <span class="text-lg">💬</span>
+        <span class="text-[10px] font-bold">شاد</span>
+      </button>
+
+      <button onclick="switchTab('roster')" id="mob-tab-roster" class="mob-btn flex flex-col items-center gap-0.5 p-1.5 rounded-2xl text-slate-500 transition touch-pop">
+        <span class="text-lg">📋</span>
+        <span class="text-[10px] font-bold">پرونده</span>
+      </button>
+
+    </div>
+  </nav>
+
+  <!-- اتصال اسکریپت‌های پروژه -->
   <script src="students.js"></script>
   <script src="app.js"></script>
-<script>
+
+  <!-- ثبت سرویس ورکر برای عملکرد ۱۰۰٪ آفلاین PWA -->
+  <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('sw.js')
-          .then(() => console.log('PWA Service Worker آماده و فعال است.'))
+          .then(() => console.log('PWA Service Worker فعال و آماده کار است.'))
           .catch((err) => console.log('خطا در ثبت Service Worker:', err));
       });
     }
   </script>
-  <!-- نوار ابزار شستی پایین صفحه ویژه نمایشگر موبایل -->
-  <div class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 py-2 px-3 flex justify-around items-center z-40 sm:hidden shadow-lg">
-    <button onclick="switchTab('homework')" class="flex flex-col items-center gap-1 text-slate-500 hover:text-indigo-600 focus:text-indigo-600">
-      <span class="text-lg">📝</span>
-      <span class="text-[10px] font-bold">تکالیف</span>
-    </button>
-    <button onclick="switchTab('attendance')" class="flex flex-col items-center gap-1 text-slate-500 hover:text-indigo-600 focus:text-indigo-600">
-      <span class="text-lg">⏱️</span>
-      <span class="text-[10px] font-bold">حضور</span>
-    </button>
-    <button onclick="switchTab('gamification')" class="flex flex-col items-center gap-1 text-slate-500 hover:text-indigo-600 focus:text-indigo-600">
-      <span class="text-lg">⭐</span>
-      <span class="text-[10px] font-bold">مثبت‌ها</span>
-    </button>
-    <button onclick="switchTab('picker')" class="flex flex-col items-center gap-1 text-indigo-600 font-extrabold">
-      <div class="w-10 h-10 -mt-5 bg-indigo-600 text-white rounded-full flex items-center justify-center shadow-md">🎯</div>
-      <span class="text-[10px] -mt-1 font-bold">پرسش</span>
-    </button>
-    <button onclick="switchTab('parent-msg')" class="flex flex-col items-center gap-1 text-slate-500 hover:text-indigo-600 focus:text-indigo-600">
-      <span class="text-lg">💬</span>
-      <span class="text-[10px] font-bold">پیام شاد</span>
-    </button>
-    <button onclick="switchTab('roster')" class="flex flex-col items-center gap-1 text-slate-500 hover:text-indigo-600 focus:text-indigo-600">
-      <span class="text-lg">📋</span>
-      <span class="text-[10px] font-bold">پرونده</span>
-    </button>
-  </div>
 </body>
 </html>
