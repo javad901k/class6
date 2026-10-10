@@ -119,7 +119,7 @@ function addPoints(studentId, delta, subject = null) {
     const filter = document.getElementById('leaderboardSubjectFilter')?.value;
     subject = (filter && filter !== 'all') ? filter : 'general';
   }
-
+triggerHaptic(delta > 0 ? 'success' : 'warning');
   if (!s.subjectPoints) s.subjectPoints = {};
   s.subjectPoints[subject] = (s.subjectPoints[subject] || 0) + delta;
   
