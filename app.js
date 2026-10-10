@@ -67,7 +67,17 @@ function switchTab(id) {
     curBtn.classList.remove('text-white/80');
     curBtn.classList.add('bg-white', 'text-indigo-800', 'font-extrabold', 'shadow-sm');
   }
-
+// هایلایت کردن تب موبایل
+  document.querySelectorAll('.mob-btn').forEach(b => {
+    b.classList.remove('text-indigo-600', 'font-black');
+    b.classList.add('text-slate-500');
+  });
+  const activeMobBtn = document.getElementById('mob-tab-' + id);
+  if (activeMobBtn) {
+    activeMobBtn.classList.remove('text-slate-500');
+    activeMobBtn.classList.add('text-indigo-600', 'font-black');
+  }
+  triggerHaptic('light');
   if (id === 'homework') renderHomeworkView();
   if (id === 'attendance') renderAttendanceView();
   if (id === 'gamification') renderLeaderboard();
