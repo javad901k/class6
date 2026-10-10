@@ -1,5 +1,12 @@
 // app.js - هسته مدیریت داده‌ها و منطق سامانه کلاس ششم الف
-
+// ویبره نرم لمسی برای گوشی (Haptic Feedback)
+function triggerHaptic(type = 'light') {
+  if ('vibrate' in navigator) {
+    if (type === 'light') navigator.vibrate(12);
+    else if (type === 'success') navigator.vibrate([15, 40, 20]);
+    else if (type === 'warning') navigator.vibrate(30);
+  }
+}
 // تاریخ روز به فرمت شمسی استاندارد
 function getTodayShamsiString(offsetDays = 0) {
   const d = new Date();
